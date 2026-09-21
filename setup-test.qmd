@@ -1,0 +1,111 @@
+---
+title: "MY472 Setup Test"
+subtitle: "LSE MY472: Data for Data Scientists"
+format:
+  html:
+    embed-resources: true
+execute:
+  echo: true
+  error: true
+---
+
+This file checks that your computer is set up for MY472. Save it in your course folder (`LSE-MY472-AT26`), open it in Positron, and click **Preview** at the top.
+
+**You are set up correctly if a page opens with output under every chunk and the last chunk says `ALL CHECKS PASSED`.** If any check fails, see the troubleshooting table in the setup guide.
+
+## 1. Which Python is running?
+
+```{python}
+import sys
+import platform
+
+checks = {}
+
+print("Python version:", platform.python_version())
+print("Running from:  ", sys.executable)
+
+checks["Python 3.14"] = sys.version_info[:2] == (3, 14)
+checks["Using the course environment (.venv)"] = (
+    sys.prefix != sys.base_prefix and ".venv" in sys.executable
+)
+```
+
+The path above should contain your course folder and `.venv`.
+
+## 2. Are the core packages installed?
+
+```{python}
+from importlib.metadata import version, PackageNotFoundError
+
+for package in ["ipykernel", "jupyter_client", "nbclient", "nbformat", "PyYAML",
+                "pandas", "numpy", "matplotlib"]:
+    try:
+        print(f"{package:15} {version(package)}")
+        checks[f"Package: {package}"] = True
+    except PackageNotFoundError:
+        print(f"{package:15} MISSING")
+        checks[f"Package: {package}"] = False
+```
+
+## 3. Is Git installed?
+
+```{python}
+import shutil
+import subprocess
+
+git = shutil.which("git")
+if git:
+    result = subprocess.run([git, "--version"], capture_output=True, text=True)
+    print(result.stdout.strip())
+else:
+    print("Git was not found.")
+
+checks["Git installed"] = git is not None
+```
+
+## 4. Can Python work with data and draw a plot?
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({"x": range(10), "y": [v ** 2 for v in range(10)]})
+print(df.head())
+
+plt.scatter(df["x"], df["y"])
+plt.xlabel("x")
+plt.ylabel("y")
+plt.show()
+checks["Data and plotting"] = True
+```
+
+You should see a small scatterplot above.
+
+## 5. Can Python reach the internet?
+
+```{python}
+from urllib.request import urlopen
+
+try:
+    with urlopen("https://github.com", timeout=10) as response:
+        print("Connected to GitHub, status", response.status)
+        checks["Internet from Python"] = response.status == 200
+except Exception as e:
+    print("Could not connect:", e)
+    checks["Internet from Python"] = False
+```
+
+## 6. Summary
+
+```{python}
+checks.setdefault("Data and plotting", False)
+
+for name, passed in checks.items():
+    print(("PASS  " if passed else "FAIL  ") + name)
+
+print()
+if all(checks.values()):
+    print("ALL CHECKS PASSED")
+else:
+    print("SOME CHECKS FAILED: see the troubleshooting table in the setup guide.")
+```
