@@ -1,6 +1,6 @@
 # MY472 — Setting up Python on your computer
 
-This guide sets up everything you need to run the course's Python notebooks (`.qmd` files) on your own laptop.
+In this course, you will write Python code inside Quarto notebooks (`.qmd` files). We will cover this in more detail in week 1 lecture, but this guide sets up everything you need to run this code on your own laptop.
 
 Try to complete the entire guide **before your Week 1 seminar**. Ideally, your final test will report **`ALL CHECKS PASSED`**. Week 1 includes the complete setup material, so students who join late or encounter problems can finish it during the seminar.
 
@@ -26,9 +26,13 @@ The [command line](https://en.wikipedia.org/wiki/Command-line_interface) is a wa
 
 After installing Positron in Step 1, you will use Positron's built-in terminal for the rest of this guide. For its shell, Positron's terminal normally uses PowerShell on Windows, zsh on macOS and Bash on Linux.
 
-When this guide shows a command on its own, type or paste it into the terminal and press **Enter**. Wait for it to finish before running the next command.
+Most of the time, we use `monospaced` text to indicate computing concepts, such as commands, code, file names, etc. When this guide shows a command on its own line, type or paste it into the terminal and press **Enter**. Wait for it to finish before running the next command. For example, this command will print the word Hello:
 
-Monospaced text inside a sentence may instead refer to a command, file, folder or error message. You do not need to run it unless the guide tells you to.
+```text
+echo "Hello"
+```
+
+Monospaced text inside a sentence, like `this`, may refer to a command, file, folder or error message. You do not need to run it unless the guide tells you to.
 
 ### When something goes wrong
 
@@ -40,6 +44,11 @@ Installing and maintaining software is part of working in data science. If somet
 4. Read suggested commands before running them. Be cautious if they conflict with the Python version, folder structure or software specified in this guide.
 
 You are not expected to solve every problem alone. If you are still stuck after making a reasonable attempt, ask for help and include the exact error message and what you have already tried.
+
+> [!NOTE]
+> **Know where to get help**
+>
+> If you need help at any point, see [Get help](README.md#get-help) for current drop-in sessions and other ways to contact the teaching team. Include the exact error message and explain what you have already tried.
 
 ## Step 1 — Install Positron
 
@@ -89,7 +98,7 @@ If you have a specific reason to use another local folder, you may do so, but it
 
 You will protect your work by committing and pushing it to GitHub regularly, using the workflow taught in Week 1.
 
-Everything for the course will live inside this folder:
+By the end of setup and as seminar materials are added, the folder will come to look like this:
 
 ```text
 LSE-MY472-AT26/
@@ -121,6 +130,8 @@ Install the following software from the official websites:
 
 Use **Python 3.14.7**, rather than whichever version is described as "latest." Using the same version makes problems easier to reproduce and solve.
 
+When an installation page offers several options, choose the installer for your operating system and accept its default settings unless this guide says otherwise.
+
 ### macOS
 
 Use the installers linked in the table.
@@ -151,11 +162,11 @@ Windows now uses the Python install manager rather than the older standalone ins
 
 Install Python **3.14.7** and its `venv` module. On Debian or Ubuntu, `venv` may be provided as a separate `python3.14-venv` package.
 
-If your distribution does not provide Python 3.14.7, you may need a third-party repository such as deadsnakes. Install Quarto and Git using the official instructions linked in the table.
+If your distribution’s official instructions do not offer Python 3.14.7 and its `venv` module, stop and ask the teaching team for help rather than installing another Python version. Install Quarto and Git using the official instructions linked in the table.
 
 ### Check your installation
 
-After installing everything, **fully quit and reopen Positron** so that it detects the new software. Reopen `LSE-MY472-AT26`, then select **Terminal → New Terminal**.
+After installing everything, quit Positron completely. Use **Positron → Quit Positron** on macOS, or close all Positron windows on Windows and Linux. Then reopen it so that it detects the new software. Reopen `LSE-MY472-AT26`, then select **Terminal → New Terminal**.
 
 On macOS or Linux, run:
 
@@ -183,7 +194,9 @@ Each command should print a version number. Python must report **`Python 3.14.7`
 
 You do this once for the whole course.
 
-In Positron, select **Terminal → New Terminal**. The terminal should open inside `LSE-MY472-AT26`.
+In Positron, select **Terminal → New Terminal**. Run `pwd` and continue only if its output ends with `LSE-MY472-AT26`. (If it doesn't, you need to open the folder in Positron by selecting **File → Open Folder…** and choosing `LSE-MY472-AT26`.)
+
+Once the output from `pwd` ends with `LSE-MY472-AT26`, proceed.
 
 ### macOS and Linux
 
@@ -209,27 +222,27 @@ We specify Python 3.14.7 so the environment does not silently change if your com
 
 **If not:** See [Troubleshooting: creating the environment](#step-4-creating-the-environment).
 
-## Step 5 — Select the environment in Positron
+## Step 5 — Complete the Python setup in Positron
 
-Positron needs to know which Python environment to use. It remembers this choice for the course folder.
+Activating `.venv` in the terminal does not automatically tell Positron to use it for its Console and notebooks.
 
-1. Open the command palette:
+1. Select **Help → Welcome**.
+2. Under **Environment setup**, expand the **Python** section.
 
-   - **macOS:** `Shift`+`Cmd`+`P`
-   - **Windows and Linux:** `Ctrl`+`Shift`+`P`
+You should see four sections. In most cases, the last section will have a red X. If so, then:
 
-2. Run **Python: Select Interpreter**.
-3. Select the interpreter whose path contains `.venv` inside `LSE-MY472-AT26`.
+3. Select **Create Python Environment**.
+4. Select the existing `.venv` inside `LSE-MY472-AT26`.
 
-**Success:** Positron's selected Python interpreter is inside `LSE-MY472-AT26/.venv`.
+**Success:** The Python section reports **4 of 4 checks passed** and displays a path containing `LSE-MY472-AT26/.venv`.
 
-**If not:** See [Troubleshooting: selecting the environment](#step-5-selecting-the-environment).
+**If not:** See [Troubleshooting: completing the Python setup](#step-5-completing-the-python-setup-in-positron).
 
 ## Step 6 — Install the course packages
 
-Download [`requirements.txt`](requirements.txt) and save it directly inside `LSE-MY472-AT26`.
+Download [`requirements.txt`](requirements.txt) into `LSE-MY472-AT26`. In Positron's file list, confirm that it appears directly inside the main folder with the exact name `requirements.txt`.
 
-In the Positron terminal, confirm that `(.venv)` appears at the beginning of the prompt. Then run:
+In the Positron terminal, confirm that `.venv` or `(.venv)` appears at the beginning of the prompt. If it does not, run the activation command from Step 4 before continuing. Then run:
 
 ```bash
 python -m pip install --upgrade pip
@@ -238,13 +251,13 @@ python -m pip install -r requirements.txt
 
 This installs the package versions used in the course.
 
-**Success:** Both commands finish without an error.
+**Success:** The terminal prompt returns after each command, and neither command ends with a line beginning `ERROR`. The commands may print many lines and take several minutes.
 
 **If not:** See [Troubleshooting: installing packages](#step-6-installing-packages).
 
 ## Step 7 — Run the setup test
 
-Download [`setup-test.qmd`](setup-test.qmd) and save it directly inside `LSE-MY472-AT26`.
+Download [`setup-test.qmd`](setup-test.qmd) into the same folder. In Positron's file list, confirm the exact name `setup-test.qmd`.
 
 Open the file in Positron and select **Preview** at the top of the file.
 
@@ -276,7 +289,7 @@ On Windows:
 python -m pip install -r at26-s02-<username>\requirements.txt
 ```
 
-Replace `s02` with the current seminar number.
+Replace `s02` with the current seminar number and `<username>` with your GitHub username. Do not include the angle brackets.
 
 The requirements files are cumulative: the current week's file contains everything used by the course so far.
 
@@ -285,6 +298,8 @@ Finally, open the first notebook and run its setup check. It will confirm which 
 ## Troubleshooting
 
 Start with the section corresponding to the step where the problem occurred.
+
+When this guide says to delete `.venv`, use Positron's file list. Right-click the `.venv` folder directly inside `LSE-MY472-AT26` and select **Delete**. Do not delete the main course folder.
 
 ### Step 1: Installing Positron
 
@@ -317,18 +332,20 @@ If Positron does not install or open, confirm that you downloaded the correct in
 | The `(.venv)` prefix does not appear | The environment is not active in this terminal | Run the activation command from Step 4 again |
 | The setup test later reports the wrong Python version | `.venv` was created using another Python version | Delete `.venv` and repeat Steps 4–6 using Python 3.14.7 |
 
-### Step 5: Selecting the environment
+### Step 5: Completing the Python setup in Positron
 
-If `.venv` is missing from the interpreter list, or Positron reports `Unable to handle …/.venv`:
+If `.venv` is missing from the environment list, select the refresh icon in the **Environment setup** panel. If it is still missing:
 
-1. Run **Python: Select Interpreter** again.
+1. Open the command palette, type **Python: Select Interpreter**, then select that command.
 2. Select **Enter interpreter path…**, then **Find…**.
 3. Choose:
 
    - **macOS and Linux:** `.venv/bin/python`
    - **Windows:** `.venv\Scripts\python.exe`
 
-If Positron remains stuck on "Discovering interpreters…", open the command palette and run **Developer: Reload Window**, then select the interpreter again.
+On macOS, if `.venv` is hidden in the file chooser, press `Cmd`+`Shift`+`.` to show hidden files.
+
+If Positron remains stuck on "Discovering interpreters…", open the command palette and run **Developer: Reload Window**, then return to **Help → Welcome** and try again.
 
 If Positron also lists conda environments used for another course, select the interpreter inside `LSE-MY472-AT26/.venv`.
 
@@ -350,5 +367,3 @@ If Positron also lists conda environments used for another course, select the in
 | `ModuleNotFoundError: No module named 'pandas'` or similar | A required package is missing | Repeat Step 6 |
 | `FAIL Internet from Python` with `CERTIFICATE_VERIFY_FAILED` on macOS | Python's security certificates were not installed | Run **Install Certificates.command**, then preview the file again |
 | `FAIL Internet from Python` with another error | Python cannot reach the internet | Check your connection, try another network and run the test again |
-
-Still stuck? See [Get help](README.md#get-help) for current drop-in sessions and other ways to contact the teaching team. Include the exact error message and explain what you have already tried.
