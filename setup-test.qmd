@@ -24,7 +24,7 @@ checks = {}
 print("Python version:", platform.python_version())
 print("Running from:  ", sys.executable)
 
-checks["Python 3.14"] = sys.version_info[:2] == (3, 14)
+checks["Python 3.13"] = sys.version_info[:2] == (3, 13)
 checks["Using the course environment (.venv)"] = (
     sys.prefix != sys.base_prefix and ".venv" in sys.executable
 )

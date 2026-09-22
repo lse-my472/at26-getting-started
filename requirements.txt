@@ -1,0 +1,22 @@
+# MY472 AT26 — Python packages for getting started (Python 3.13)
+# Install with:  python -m pip install -r requirements.txt
+#
+# This file covers setup only: everything `setup-test.qmd` needs in order to pass.
+# Course material starts at week01/seminar/requirements.txt, which begins as a copy of this
+# file and adds to it. Each week's seminar folder carries its own cumulative requirements.txt:
+# copy the previous week's file, then add a new section for anything that week needs. There is
+# no master file. Pin every package (==) to the version installed when it was added; refresh
+# pins once a year, never mid-term. Only packages the course uses directly are pinned, not
+# their dependencies.
+
+# --- Rendering a notebook (Quarto's bridge imports all five) ---
+ipykernel==7.3.0          # the Python kernel the chunks run in
+jupyter_client==8.9.1     # how Quarto talks to that kernel
+nbclient==0.11.0          # runs the notebook Quarto builds from the .qmd
+nbformat==5.11.1          # reads/writes that notebook structure
+PyYAML==6.0.3             # parses YAML frontmatter and #| chunk options (imports as yaml)
+
+# --- Checks in setup-test.qmd (section 4 builds a data frame and draws a plot) ---
+pandas==3.0.5             # tabular data
+numpy==2.5.2              # numerical arrays
+matplotlib==3.11.1        # plotting

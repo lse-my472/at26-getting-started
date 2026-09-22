@@ -12,7 +12,7 @@ Try to complete the entire guide **before your Week 1 seminar**. Ideally, your f
 You will install:
 
 1. **Positron** — the editor in which you will write and run code.
-2. **Python 3.14.7** — the programming language used in this course.
+2. **Python 3.13.15** — the programming language used in this course.
 3. **Quarto** — turns a `.qmd` notebook into a readable document.
 4. **Git** — receives course materials and saves your work to GitHub.
 
@@ -112,7 +112,12 @@ LSE-MY472-AT26/
 
 In Positron, select **File → Open Folder…** and choose `LSE-MY472-AT26`.
 
-Always open the main course folder rather than an individual seminar folder. Positron uses the main folder to find the shared course environment.
+> [!NOTE]
+> **Trusted folders**
+>
+> The first time you open a folder in Positron, it may ask you to confirm that you trust the folder. You should choose to trust your `LSE-MY472-AT26` folder. Sometimes, Positron does not ask you, and opens in "Restricted Mode." If so, you will see a grey bar toward the top of the app with a button called "Manage." Click Manage and then select "Trust." If you do not do this, Positron will severely limit your ability to work with files in this folder.
+
+Always open the main course folder `LSE-MY472-AT26` rather than any subfolder contained within it. Positron uses the main folder to find the shared course environment.
 
 **Success:** Positron has `LSE-MY472-AT26` open as the main folder.
 
@@ -124,11 +129,11 @@ Install the following software from the official websites:
 
 | Software | Download | Purpose |
 |---|---|---|
-| **Python 3.14.7** | [Python 3.14.7](https://www.python.org/downloads/release/python-3147/) | The programming language |
+| **Python 3.13.15** | [Python 3.13.15](https://www.python.org/downloads/release/python-31315/) | The programming language |
 | **Quarto** | [Quarto installation](https://quarto.org/docs/get-started/) | Runs and renders `.qmd` notebooks |
 | **Git** | [Git downloads](https://git-scm.com/downloads) | Manages course materials and your work |
 
-Use **Python 3.14.7**, rather than whichever version is described as "latest." Using the same version makes problems easier to reproduce and solve.
+Use **Python 3.13.15**, rather than whichever version is described as "latest." Using the same version makes problems easier to reproduce and solve.
 
 When an installation page offers several options, choose the installer for your operating system and accept its default settings unless this guide says otherwise.
 
@@ -136,7 +141,7 @@ When an installation page offers several options, choose the installer for your 
 
 Use the installers linked in the table.
 
-After installing Python, open **Applications → Python 3.14** in Finder and double-click **Install Certificates.command**. Python may otherwise fail when it tries to make secure connections to websites.
+After installing Python, open **Applications → Python 3.13** in Finder and double-click **Install Certificates.command**. Python may otherwise fail when it tries to make secure connections to websites.
 
 Git may already be installed. In the Positron terminal, run `git --version`. If it prints a version number, Git is ready. If macOS asks to install the command-line developer tools, select **Install**; these tools include Git and are sufficient for this course. If the terminal instead displays an error and no installation prompt appears, install Git using the link in the table above.
 
@@ -151,7 +156,7 @@ winget install 9NQ7512CXL7T
 Then install the exact course version of Python:
 
 ```powershell
-py install 3.14.7
+py install 3.13.15
 ```
 
 Install Quarto and Git using the links in the table.
@@ -160,9 +165,9 @@ Windows now uses the Python install manager rather than the older standalone ins
 
 ### Linux
 
-Install Python **3.14.7** and its `venv` module. On Debian or Ubuntu, `venv` may be provided as a separate `python3.14-venv` package.
+Install Python **3.13.15** and its `venv` module. On Debian or Ubuntu, `venv` may be provided as a separate `python3.13-venv` package.
 
-If your distribution’s official instructions do not offer Python 3.14.7 and its `venv` module, stop and ask the teaching team for help rather than installing another Python version. Install Quarto and Git using the official instructions linked in the table.
+If your distribution’s official instructions do not offer Python 3.13.15 and its `venv` module, stop and ask the teaching team for help rather than installing another Python version. Install Quarto and Git using the official instructions linked in the table.
 
 ### Check your installation
 
@@ -171,7 +176,7 @@ After installing everything, quit Positron completely. Use **Positron → Quit P
 On macOS or Linux, run:
 
 ```bash
-python3.14 --version
+python3.13 --version
 quarto --version
 git --version
 ```
@@ -179,14 +184,14 @@ git --version
 On Windows, run:
 
 ```powershell
-py -V:3.14.7 --version
+py -V:3.13.15 --version
 quarto --version
 git --version
 ```
 
-Each command should print a version number. Python must report **`Python 3.14.7`**.
+Each command should print a version number. Python must report **`Python 3.13.15`**.
 
-**Success:** Python reports version 3.14.7, and Quarto and Git each report a version.
+**Success:** Python reports version 3.13.15, and Quarto and Git each report a version.
 
 **If not:** See [Troubleshooting: installing Python, Quarto and Git](#step-3-installing-python-quarto-and-git).
 
@@ -200,10 +205,10 @@ Once the output from `pwd` ends with `LSE-MY472-AT26`, proceed.
 
 ### macOS and Linux
 
-Run:
+Run the following:
 
 ```bash
-python3.14 -m venv .venv
+python3.13 -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -212,11 +217,11 @@ source .venv/bin/activate
 Run:
 
 ```powershell
-py -V:3.14.7 -m venv .venv
+py -V:3.13.15 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-We specify Python 3.14.7 so the environment does not silently change if your computer later installs another Python version.
+We specify Python 3.13.15 so the environment does not silently change if your computer later installs another Python version.
 
 **Success:** Your terminal prompt begins with `(.venv)`.
 
@@ -229,12 +234,16 @@ Activating `.venv` in the terminal does not automatically tell Positron to use i
 1. Select **Help → Welcome**.
 2. Under **Environment setup**, expand the **Python** section.
 
-You should see four sections. In most cases, the last section will have a red X. If so, then:
+You should see four sections. In most cases, the first three sections will have green checkmarks and the last section will have a red X. For example:
 
-3. Select **Create Python Environment**.
-4. Select the existing `.venv` inside `LSE-MY472-AT26`.
+![Positron Welcome screenshot](welcome-screen.png)
 
-**Success:** The Python section reports **4 of 4 checks passed** and displays a path containing `LSE-MY472-AT26/.venv`.
+If this is what you see, then:
+
+3. Select **Use Existing** from the drop-down menu that appears at the top of the page.
+4. Press the refresh button on the top right of the blue "Environment setup" panel.
+
+**Success:** The Python section reports **4 of 4 checks passed** and under "A supported Python is installed", you see a path that ends with `LSE-MY472-AT26/.venv/bin/python`.
 
 **If not:** See [Troubleshooting: completing the Python setup](#step-5-completing-the-python-setup-in-positron).
 
@@ -242,7 +251,7 @@ You should see four sections. In most cases, the last section will have a red X.
 
 Download [`requirements.txt`](requirements.txt) into `LSE-MY472-AT26`. In Positron's file list, confirm that it appears directly inside the main folder with the exact name `requirements.txt`.
 
-In the Positron terminal, confirm that `.venv` or `(.venv)` appears at the beginning of the prompt. If it does not, run the activation command from Step 4 before continuing. Then run:
+In the Positron terminal, confirm that `(.venv)` appears at the beginning of the prompt. If it does not, run the activation command from Step 4 before continuing. Then run:
 
 ```bash
 python -m pip install --upgrade pip
@@ -261,39 +270,11 @@ Download [`setup-test.qmd`](setup-test.qmd) into the same folder. In Positron's 
 
 Open the file in Positron and select **Preview** at the top of the file.
 
-After a few seconds, a page should open with output beneath every section, including a small scatterplot.
+After a few seconds, a page should open on the right with output beneath every section, including a small scatterplot.
 
 **Success:** The final section reports **`ALL CHECKS PASSED`**.
 
 **If not:** See [Troubleshooting: the setup test](#step-7-the-setup-test).
-
-## After setup: the weekly routine
-
-At the start of each week:
-
-1. Open Positron and open `LSE-MY472-AT26`.
-2. Add the week's seminar materials to the course folder. Week 1 will show you how.
-3. If the seminar folder contains a `requirements.txt`, activate the course environment and install it.
-
-On macOS or Linux:
-
-```bash
-source .venv/bin/activate
-python -m pip install -r at26-s02-<username>/requirements.txt
-```
-
-On Windows:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r at26-s02-<username>\requirements.txt
-```
-
-Replace `s02` with the current seminar number and `<username>` with your GitHub username. Do not include the angle brackets.
-
-The requirements files are cumulative: the current week's file contains everything used by the course so far.
-
-Finally, open the first notebook and run its setup check. It will confirm which Python environment is active and report any missing packages.
 
 ## Troubleshooting
 
@@ -317,11 +298,11 @@ If Positron does not install or open, confirm that you downloaded the correct in
 
 | What you see | What it means | What to do |
 |---|---|---|
-| `python3.14` or `py -V:3.14.7` is not recognised | Python 3.14.7 is missing or Positron was open during installation | Fully quit and reopen Positron; if the command still fails, install Python again |
-| Python reports another version | The wrong Python release was installed or selected | Install Python 3.14.7 and repeat the version check |
+| `python3.13` or `py -V:3.13.15` is not recognised | Python 3.13.15 is missing or Positron was open during installation | Fully quit and reopen Positron; if the command still fails, install Python again |
+| Python reports another version | The wrong Python release was installed or selected | Install Python 3.13.15 and repeat the version check |
 | `quarto` is not recognised | Quarto is missing or Positron was open during installation | Fully quit and reopen Positron; if the command still fails, install Quarto again |
 | `git` is not recognised | Git is missing or Positron was open during installation | Fully quit and reopen Positron; if the command still fails, install Git again |
-| `CERTIFICATE_VERIFY_FAILED` on macOS | Python's security certificates were not installed | Run **Install Certificates.command** from **Applications → Python 3.14** |
+| `CERTIFICATE_VERIFY_FAILED` on macOS | Python's security certificates were not installed | Run **Install Certificates.command** from **Applications → Python 3.13** |
 
 ### Step 4: Creating the environment
 
@@ -330,7 +311,7 @@ If Positron does not install or open, confirm that you downloaded the correct in
 | Windows reports that running scripts is disabled | PowerShell has blocked the activation script | Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned`, then activate the environment again |
 | The terminal prompt begins with `(base)` | A conda environment has been activated automatically | Run `conda deactivate`, then activate the course `.venv` using the command in Step 4 |
 | The `(.venv)` prefix does not appear | The environment is not active in this terminal | Run the activation command from Step 4 again |
-| The setup test later reports the wrong Python version | `.venv` was created using another Python version | Delete `.venv` and repeat Steps 4–6 using Python 3.14.7 |
+| The setup test later reports the wrong Python version | `.venv` was created using another Python version | Delete `.venv` and repeat Steps 4–6 using Python 3.13.15 |
 
 ### Step 5: Completing the Python setup in Positron
 
@@ -362,7 +343,7 @@ If Positron also lists conda environments used for another course, select the in
 | What you see | What it means | What to do |
 |---|---|---|
 | `FAIL Using the course environment (.venv)` | Positron is using a different Python interpreter | Repeat Step 5, then Step 6 |
-| `FAIL Python 3.14.7` | The environment was created with another Python version | Delete `.venv` and repeat Steps 4–6 |
+| `FAIL Python 3.13.15` | The environment was created with another Python version | Delete `.venv` and repeat Steps 4–6 |
 | `No module named 'yaml'`, `No module named 'nbclient'` or `Jupyter is not available` | Quarto is using an environment without the required packages | Repeat Step 5, then Step 6 |
 | `ModuleNotFoundError: No module named 'pandas'` or similar | A required package is missing | Repeat Step 6 |
 | `FAIL Internet from Python` with `CERTIFICATE_VERIFY_FAILED` on macOS | Python's security certificates were not installed | Run **Install Certificates.command**, then preview the file again |

@@ -51,7 +51,7 @@ You have completed this step when the repository’s watch setting shows **All A
 
 Follow the [setup guide](setup.md) for macOS, Windows or Linux. It will guide you through installing:
 
-- Python 3.14
+- Python 3.13
 - Quarto
 - Positron, the editor used in this course
 - Git
