@@ -72,7 +72,7 @@ If you have not received your organisation invitation:
 
 For installation and computer problems, attend a drop-in help session with the course graduate teaching assistants:
 
-- Wednesday 30 September, 16:00–17:00 (location to be confirmed).
-- Wednesday 7 October, 16:00–17:00 (location to be confirmed).
+- Wednesday 30 September, 16:00–17:00 (CON.1.01).
+- Wednesday 7 October, 16:00–17:00 (CBG.1.08).
 
 Once you have joined the organisation, you can also open a **Tech help** issue in [`at26-community`](https://github.com/lse-my472/at26-community).
