@@ -1,0 +1,378 @@
+---
+title: "Seminar 1.2: Creating a Repository"
+subtitle: "LSE MY472: Data for Data Scientists"
+date-modified: "30 September 2026"
+date-format: "D MMMM YYYY"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    mathjax: true
+execute:
+  echo: true
+  eval: false
+---
+
+::: {.callout-warning}
+You must complete the course set up steps at <https://github.com/lse-my472/at26-getting-started> before you can proceed.
+:::
+
+We will work through this notebook together as a class. Do not go ahead: several steps only make sense once the previous one has finished. By the end you will have a repository called `lse-my472-at26-lectures` in your own GitHub account, cloned to your computer, holding this week's lecture slides. You can use it every week for the rest of the term.
+
+Throughout, replace `LSE-XXXXX-2627` with your own course GitHub username.
+
+::: {.callout-warning}
+## Code in this file will not run until you change global execution options
+
+Every notebook in this course has `eval: false` set in its preamble, at the very top of the file. That tells Quarto **not** to run any of the code chunks when it compiles the document.
+
+If you want your code to run, change that line to `eval: true` before you compile.
+:::
+
+## Step 1. Make the remote repository
+
+We are going to do something that may feel backwards: we will create the repository **on GitHub first**, and only then bring it down to your computer. This is the order we will use in MY472 because it lets Git set up the link between your computer and GitHub for you.
+
+While logged into your course GitHub account in a web browser, create a **private** repository called `lse-my472-at26-lectures`.
+
+Click the "Create new..." button in the top right corner (the one with a plus sign), then select "New repository".
+
+- **Repository name:** `lse-my472-at26-lectures`. The name must be unused in your account, and should contain only letters, numbers, underscores and dashes. This is good practice for *every* file and folder name you create, not just on GitHub. Most operating systems cope with unusual characters, but a great deal of software does not.
+- **Visibility:** Private. 
+- **Add README:** toggle this **on**. A README is an important part of any repo. It is the first thing a reader sees, and it explains what the repo is for. 
+- **Add .gitignore:** leave this as "None". We will write our own in Step 9.
+
+Then click "Create repository".
+
+## Step 2. Authentication
+
+### Step 2a. Check where Git will save your credentials
+
+Git has nowhere of its own to keep a password. It relies on a **credential helper**: a small program that hands your credentials to your operating system's own password store. (More in week 3.) On most computers a helper is already switched on, so this is a check rather than an installation. Run:
+
+```bash
+git config --get credential.helper
+```
+
+- **macOS:** it should print `osxkeychain`. If it prints nothing, run: `git config --global credential.helper osxkeychain`.
+- **Windows:** it should print `manager`. If it prints nothing, reinstall Git for Windows.
+- **Linux:** it will probably print nothing. Run: `git config --global credential.helper libsecret`. On some distributions this helper has to be built before it will work --- if Git later reports that it cannot find it, ask the teaching team rather than guessing.
+
+### Step 2b. Get a token and enter it
+
+::: callout-warning
+For any of the steps below, if a browser window shows you are logged into a GitHub account other than your LSE GitHub account, please switch to your LSE GitHub account before continuing.
+:::
+
+#### Windows users
+
+You do not need a token. When you complete the tasks in Step 3, the Git Credential Manager will open a window offering several ways to sign in. Choose the browser option, sign in as `LSE-XXXXX-2627`, and then sign in like usual.
+
+#### macOS and Linux users
+
+You will need a token in the next step. To make a token, go to <https://github.com/settings/personal-access-tokens/new>. Assuming you're logged into your LSE GitHub account (check the avatar on top right), then make a token as follows:
+
+| Field | What to choose |
+|---|---|
+| Token name | `my472-at26-own-repos` |
+| Resource owner | your own account, `LSE-XXXXX-2627` |
+| Expiration | 25 March 2027 (end of WT 2027) |
+| Repository access | All repositories |
+
+Then, under "Permissions":
+
+- Click "Repositories", then "+ Add permissions"
+- Tick "Contents", then close the menu by clicking "+ Add permissions" again
+- Press "Access: Read-only" next to "Contents" and change it to "Read and write"
+
+::: {.callout-important}
+Do **NOT** close the browser window that shows you your token. Press the copy button to copy the token, and then minimise (or otherwise hide) the browser window so others cannot see it.
+:::
+
+## Step 3. Clone your remote repo into your course folder
+
+Cloning copies the repository from GitHub onto your computer, and sets up the link between the two.
+
+On the repository's page on GitHub, click the green **Code** button and copy the HTTPS URL.
+
+Then, in the Positron terminal:
+
+```bash
+cd ~/LSE-MY472-AT26
+git clone https://github.com/LSE-XXXXX-2627/lse-my472-at26-lectures.git
+```
+
+::: {.callout-note}
+macOS and Linux users will be prompted to enter a username and password. For the username, use your LSE GitHub user name (in the form `LSE-XXXXX-2627`), and for your password, use the token you created in Step 2.
+:::
+
+::: {.callout-warning}
+If the clone fails with `Repository not found` **and you were never asked to sign in**, your computer already has a different GitHub account saved from some earlier use of Git. Git is quietly using that account, and it cannot see your new repository.
+
+Remove the saved account, then try the clone again:
+
+- **macOS:** open Keychain Access, search for `github.com`, and delete the entry.
+- **Windows:** open Credential Manager → Windows Credentials, and remove `git:https://github.com`.
+:::
+
+Check that the remote repo was successfully cloned by running this in the terminal:
+
+```bash
+ls
+```
+
+You should see a new folder, `lse-my472-at26-lectures`, alongside any other folders you have in `LSE-MY472-AT26`.
+
+## Step 4. Tell Git who you are
+
+Every commit Git records who made the commit using a name and an email address. For this course, that name should be your course GitHub username, `LSE-XXXXX-2627`, rather than whatever Git might already be using on your computer. 
+
+::: {.callout-note}
+Git (the version control software on your computer) and GitHub (cloud storage for Git repos) are different things. Git never checks these settings with GitHub and it will use any name and email you give it.
+
+The email address is still worth setting correctly. GitHub works out who made a commit by matching that address against the addresses registered on GitHub accounts, so an address it does not recognise leaves your commits showing no author at all. The noreply address below is registered to your course account, which is what keeps your commits linked to it while your real address stays private.
+:::
+
+You could set this once for your whole computer, but then any other work you do would be labelled with an LSE course username too. Instead you will set it for your course folder only.
+
+In the Positron terminal, create a small settings file for this course. Replace `LSE-XXXXX-2627` with your own username, and `‹YOUR GITHUB NOREPLY EMAIL›` with your GitHub noreply address (see the note below):
+
+```bash
+git config --file "$HOME/.gitconfig-my472" user.name "LSE-XXXXX-2627"
+git config --file "$HOME/.gitconfig-my472" user.email "‹YOUR GITHUB NOREPLY EMAIL›"
+```
+
+::: callout-note
+`$HOME` is another way of writing the path to your home folder. This is the same place as the `~` you saw in lecture. We use it here because macOS, Linux and Windows all understand it the same way, and these commands have to work on all three.
+:::
+
+::: callout-note
+In the second line above, do **not** use your LSE email address. The email address you set there is stored permanently in the repo's commit history and is visible to anyone who can see the repo, so using your real address would undo the anonymity of your `LSE-XXXXX-2627` account. Your GitHub account has a "noreply" email address that keeps your real email address out of your commits. Find it at <https://github.com/settings/emails>, under "Keep my email addresses private". It looks like `12345678+LSE-XXXXX-2627@users.noreply.github.com`. Please also toggle on the setting to keep your email address private.
+:::
+
+Then tell Git to apply that file to anything inside your course folder:
+
+```bash
+git config --global includeIf."gitdir/i:~/LSE-MY472-AT26/".path "~/.gitconfig-my472"
+```
+
+Now check that it worked. The repository you cloned in the last step is inside your course folder, so Git should report your course username when you ask it from there:
+
+```bash
+cd ~/LSE-MY472-AT26/lse-my472-at26-lectures
+git config user.name
+```
+
+Now compare that with somewhere outside your course folder:
+
+```bash
+cd ~
+git config user.name
+```
+
+This time Git reports whatever name it was using before (or nothing at all if it has never been given one).
+
+::: callout-note
+These settings apply to every repository inside your course folder, including the seminar repositories you will clone each week. Outside that folder, Git uses whatever username and email was configured before.
+
+Note that Git decides which of the two applies by looking at *where the repository is*, and it will use these settings for any repo inside the course folder. Note though, that running `git config user.name` in a folder that is _not_ a repository at all will not show your course username, even if that folder is inside `LSE-MY472-AT26`.
+:::
+
+## Step 5. Make a folder for this week (using Python)
+
+We'll now use Python to make a new subdirectory to store our week 1 materials. We could do this at the command line as well. (Note the execution options in the chunk below.)
+
+::: {.callout-note}
+## This chunk has its own execution options
+
+The `#| eval: false` line inside the chunk below is a local execution option and applies to this chunk alone. It overrides whatever the preamble at the top of the file says. Change it to `#| eval: true` now. If you leave it as it is, the chunk is skipped every time you compile the document, and Step 6 then fails.
+:::
+
+```{python}
+#| eval: false
+import os
+
+lecture_repo = os.path.expanduser("~/LSE-MY472-AT26/lse-my472-at26-lectures")
+week01_dir = os.path.join(lecture_repo, "week01")
+
+if not os.path.exists(week01_dir): 
+  os.mkdir(week01_dir)
+```
+
+Two things to notice:
+
+- `os.path.expanduser()` turns the `~` shortcut into your real home directory. Python does not understand `~` on its own the way the command line does.
+- `os.path.join()` builds the path for you, using the right separator for your operating system (`/` on macOS and Linux, `\` on Windows). Always build paths this way rather than gluing strings together by hand so that your code works on all systems.
+
+## Step 6. Download the lecture slides, using Python
+
+Now we will fetch this week's slides straight from the web into the folder we just made, without opening a browser.
+
+```{python}
+from urllib.request import urlretrieve
+
+## Where is the file located?
+url = "https://raw.githubusercontent.com/lse-my472/at26-getting-started/main/week01/my472-w01-computation-core.pdf"
+
+## Extract the file name from the full URL
+pdf_file_name = url.split("/")[-1]
+print(pdf_file_name)
+
+## Create a path to where the file should go (using same file name)
+destination = os.path.join(week01_dir, pdf_file_name)
+print(destination)
+
+## Download if not already downloaded
+if not os.path.exists(destination):
+  urlretrieve(url, destination)
+```
+
+::: {.callout-note}
+## Where that URL comes from
+
+The slides live in a repository you can already see: `lse-my472/at26-getting-started`, in its `week01` folder. But the address you get by clicking through GitHub in a browser (starting `https://github.com/...`) gives you a *web page* that displays the file, surrounded by GitHub's menus and buttons. If you try to download that page, you get that webpage but not the PDF.
+
+GitHub offers each file's actual contents at a separate URL beginning with `raw.githubusercontent.com`. The pattern is always the same, which means you can also just write it out:
+
+```
+https://raw.githubusercontent.com/‹owner›/‹repository›/‹branch›/‹path to the file›
+```
+
+For this file, it is `lse-my472` / `at26-getting-started` / `main` / `week01/my472-w01-computation-core.pdf`.
+:::
+
+Confirm it is really there before moving on:
+
+```{python}
+os.listdir(week01_dir)
+```
+
+One more thing worth noticing: this file will download _without_ any password or token because `at26-getting-started` is a **public** repository. If you try this on a private one (your new `lse-my472-at26-lectures`, for instance) GitHub will refuse. Getting non-public data is an issue we return to later in the course.
+
+## Step 7. Add your own notes (optional)
+
+If you took notes during the lecture, put them in the `week01` folder now. You can simply drag them there in Positron's Explorer panel, or in Finder (macOS) or File Explorer (Windows).
+
+Any file type is fine---a Word document, a PDF, a photograph of handwritten notes. If you did not take notes, skip this step; nothing later depends on it.
+
+## Step 8. Stage and commit your changes
+
+Back in the terminal. First, move into the repository and ask Git what it has noticed:
+
+```bash
+cd ~/LSE-MY472-AT26/lse-my472-at26-lectures
+git status
+```
+
+Git will report that `week01/` is **untracked** --- it can see the folder, but it is not yet recording anything about it. Now stage it and commit:
+
+```bash
+git add week01
+git commit -m "Add Week 1 lecture slides and notes"
+```
+
+Check what you have done:
+
+```bash
+git status
+git log
+```
+
+`git status` should now report nothing to commit. `git log` should show two commits: the "Initial commit" GitHub made when it created your README, and the one you just made.
+
+::: {.callout-note}
+Committing does **not** send anything to GitHub. Everything so far has happened on your own computer. The repository on GitHub still knows nothing about `week01`, which is what Step 10 is for.
+:::
+
+## Step 9. Tell Git what to ignore
+
+Some files should never be tracked. Your operating system scatters hidden clutter through your folders, Python leaves caches behind when it runs, and (most importantly) files containing passwords or personal data must _never_ be put on GitHub.
+
+You can control this with a file called `.gitignore`: a plain text list, one pattern per line, of things Git should pretend it cannot see. We will write it from the command line.
+
+**macOS and Linux:**
+
+```bash
+echo ".DS_Store" > .gitignore
+echo "__pycache__/" >> .gitignore
+echo ".venv/" >> .gitignore
+```
+
+::: {.callout-important}
+Note the difference between `>` and `>>`. As we covered in lecture, a single `>` **overwrites** the file, wiping whatever was in it. A double `>>` **appends** a new line of text to the end of the file. Getting these the wrong way round is a classic way that people destroy a file's contents. The command line will not warn you or ask you to confirm.
+:::
+
+
+**Windows (PowerShell):**
+
+```powershell
+Set-Content -Encoding ascii .gitignore ".DS_Store"
+Add-Content -Encoding ascii .gitignore "__pycache__/"
+Add-Content -Encoding ascii .gitignore ".venv/"
+```
+
+Check the file says what you think it says, then commit it --- the `.gitignore` is itself part of the repository:
+
+```bash
+cat .gitignore
+git status
+git add .gitignore
+git commit -m "Add gitignore"
+```
+
+::: {.callout-note}
+`.gitignore` only applies to files Git is not *already* tracking. If you commit a file first and add it to `.gitignore` afterwards, Git carries on tracking it. This is why you write the `.gitignore` early in a project.
+:::
+
+## Step 10. Push to GitHub
+
+Now send your commits to GitHub:
+
+```bash
+git push
+```
+
+Git will report how much it transferred, and name the branch it updated. Notice that it does **not** ask you to log in: you authenticated once in Step 2, and because the clone in Step 3 succeeded, Git saved that credential and will go on using it.
+
+## Step 11. Check that it worked
+
+Go back to your repository's page on GitHub in the browser and refresh it.
+
+You should now see the `week01` folder. Click into it, and you will find the slides you downloaded in Step 6, along with any notes you added in Step 7. Click on the commit message at the top of the file list to see exactly what changed and when.
+
+## Step 12. Make a change on GitHub
+
+So far every change has travelled in one direction: your computer to GitHub. Now we will go the other way.
+
+On your repository's page on GitHub, click on `README.md`, then click the pencil icon to edit it. Write a short description of what this repository is for, i.e. that this is where you will keep each week's lecture slides and your notes.
+
+Then scroll to the bottom, write a commit message such as "Describe the repo", and click **Commit changes**.
+
+You have just made a commit *on GitHub*, without touching your own computer. Your local copy is now out of date, and the GitHub copy is ahead of your local copy by a commit.
+
+## Step 13. Pull the change back down
+
+Prove it to yourself first:
+
+```bash
+cat README.md
+```
+
+Your computer still shows the old README, because nothing has told it otherwise. Now bring the change down:
+
+```bash
+git pull
+cat README.md
+```
+
+Your edit appears. Check the history:
+
+```bash
+git log
+```
+
+You will see the commit you made in the browser sitting at the top, above the ones you made on your own machine.
+
+::: {.callout-note}
+This is the full cycle, and it is the workflow you will use every week: **pull** before you start work, so you have the latest version; **add** and **commit** as you go, to record what you have done; **push** when you are finished, so the work is safely off your machine. Get into the habit of pushing at the end of every seminar. A commit that only exists on your laptop is not a backup and you will lose it if you lose access to your computer.
+:::

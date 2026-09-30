@@ -1,0 +1,271 @@
+---
+title: "Seminar 1 Exercises"
+subtitle: "LSE MY472: Data for Data Scientists"
+date-modified: "30 September 2026"
+date-format: "D MMMM YYYY"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    mathjax: true
+execute:
+  echo: true
+  eval: false
+---
+
+Some exercises below have empty code chunks for your answers. Delete the `# your answer goes here` comment when you fill one in.
+
+Run each chunk as you finish it since later chunks usually rely on earlier ones. When you are done, compile the `.qmd` to `.html` with the Preview button above.
+
+::: {.callout-warning}
+## Code in this file will not run until you change global execution options
+
+Every notebook in this course has `eval: false` set in its preamble, at the very top of the file. That tells Quarto **not** to run any of the code chunks when it compiles the document.
+
+If you want your code to run, change that line to `eval: true` before you compile. You will need to do this before Exercise 7, or the HTML you hand in will contain your code but none of its output.
+:::
+
+## Exercise 1: launching your course folder in Positron
+
+You must complete the course set up steps at <https://github.com/lse-my472/at26-getting-started> before you can proceed. The following will not work unless you have installed all the required software.
+
+Before going any further, check that Positron is running the Python you think it is. Run the chunk below.
+
+```{python}
+#| eval: true
+import sys
+print(sys.version)
+print(sys.executable)
+```
+
+The path printed by `sys.executable` should contain `.venv`, inside your `LSE-MY472-AT26` folder. If it does not, Positron is using a different Python installation and the later exercises will fail with `ModuleNotFoundError`. Go back to the course set up steps and select the interpreter inside your course virtual environment. Try to work it out yourself first and ask a member of the teaching team if you cannot figure it out.
+
+## Exercise 2: basic command line
+
+Work at the command line for this exercise, using the Terminal in Positron.
+
+- Open a new Terminal in Positron and make sure you are in your home directory. If you are not, use the appropriate command to change to it.
+
+- Navigate to the `week01` folder you made in `02-first-repo.qmd`, inside your `lse-my472-at26-lectures` repo, using the appropriate command and a _relative_ path.
+
+- Print the current working directory using the appropriate command.
+
+- Navigate to your Desktop using the appropriate command and an _absolute_ path.
+
+- Find out how many files and subdirectories are on your Desktop with `ls -1 | wc -l` (macOS/Linux) or `(dir . | measure).Count;` (Windows). (If the number is high, ask yourself: is your Desktop messy, cluttered or disorganised?)
+
+- Create an empty text file `commandline1.txt` inside the current working directory.
+
+- Move `commandline1.txt` from your Desktop into that same `week01` folder, using `mv` (macOS/Linux) or `Move-Item` (Windows). The move needs two paths: where the file is now, and where it should end up.
+
+- Click into the Terminal panel and select all the text: on macOS press Command(⌘)+A; on Windows click at the start of the output and drag to the end. Copy it (Command(⌘)+C, or Ctrl+C), open `commandline1.txt` from the Positron File Explorer, paste the text in (Command(⌘)+V, or Ctrl+V), then save and close it.
+
+::: {.callout-note}
+Windows users: `Ctrl+C` in a terminal normally *interrupts* whatever is running rather than copying. It copies here only because you selected text first. If nothing is selected, `Ctrl+C` will not copy --- and if a command is running, it will stop it.
+:::
+
+## Exercise 3: your seminar repository
+
+In `02-first-repo.qmd` you made a repository in your *own* GitHub account. Every other repo in MY472 is owned by the `lse-my472` organisation, and needs its own credential, scoped to that organisation. So you will now make a second credential, give it to Git, and use it to request and clone this week's seminar repository.
+
+### Step 1. Make a token for the course organisation
+
+Almost all of your coursework lives in repositories owned by the `lse-my472` organisation, and Git needs a credential to read and write them. You made one of these **fine-grained personal access tokens** in `02-first-repo.qmd`. this one is identical except for *who owns the repositories it authorises*. Look back at that notebook and make a similar token with only these settings changed:
+
+| Field | What to choose |
+|---|---|
+| Token name | `my472-at26` |
+| Resource owner | `lse-my472` |
+
+::: {.callout-tip}
+## If you are on Windows, or did not need a token in `02-first-repo.qmd`
+
+Windows users authenticated through a browser pop-up in `02-first-repo.qmd`, so this is your first token. Follow the instructions for making a token in `02-first-repo.qmd`, making the changes described above.
+:::
+
+### Step 2. Give the token to Git
+
+This part is *different* from `02-first-repo.qmd`, where Git asked for a password and stored the answer on its own. As usual, be sure to replace `LSE-XXXXX-2627` with your own course GitHub username.
+
+In the Positron terminal, run the following, replacing `‹YOUR TOKEN›` with the token you just copied:
+
+```bash
+git config --global url."https://LSE-XXXXX-2627:‹YOUR TOKEN›@github.com/lse-my472/".insteadOf "https://github.com/lse-my472/"
+```
+
+::: callout-important
+**Never** paste your token into the code chunk above. If you save this file and then push it, the course instructors will see your token. Type the command directly into the terminal instead.
+:::
+
+So this tells Git *whenever you talk to a remote repo owned by the organisation `lse-my472`, use this account and this token.* 
+
+Now check that it works. `at26-community` is a private repository owned by `lse-my472` and that only course members can see. `git ls-remote` asks a remote repository what branches it has, without downloading any of it:
+
+```bash
+git ls-remote https://github.com/lse-my472/at26-community
+```
+
+It worked if you see several lines ending in `refs/...` and **no password prompt**.
+
+| What you see instead | What it means |
+|---|---|
+| A prompt for a username or password | The rewrite did not match. Re-run the command above and check you replaced *both* `LSE-XXXXX-2627` and `‹YOUR TOKEN›` |
+| `Repository not found` | Your token cannot see the organisation. Check "Resource owner" was `lse-my472`, and that you have accepted your invitation to the organisation |
+| `Invalid username or token` | The token was copied incorrectly, or has expired |
+
+::: callout-important
+Your token is now stored in plain text in `~/.gitconfig`. **Never paste the output of `git config --global --list` anywhere** --- it contains your token, and anyone who asks you to is [phishing](https://en.wikipedia.org/wiki/Phishing) you. **If you think it has leaked, delete it at <https://github.com/settings/personal-access-tokens> and repeat this step.**
+:::
+
+### Step 3. Request this week's repository
+
+Each week you work in your own private copy of that week's seminar repository. The teaching team does not make these for you. You request each one with a link. Logged in to your course GitHub account, open this week's link:
+
+<https://github.com/lse-my472/at26-assignment-accept/issues/new?template=accept-assignment.yml&title=at26-seminar01>
+
+Tick the box under "Confirm", then click "Create". **Do not edit the title**: it must stay `at26-seminar01`.
+
+Within a minute the page you created is deleted and your new repository appears at <https://github.com/orgs/lse-my472/repositories>. It is called `at26-seminar01-LSE-XXXXX-2627`, it is private, and it already contains a README and this week's solutions.
+
+::: callout-note
+If your repository does not appear, open the link again. Doing so is always safe: it never creates a second copy.
+:::
+
+::: callout-warning
+## Cannot see anything in the organisation?
+
+If you cannot access the organisation's repositories at all (e.g., this link does nothing or `at26-community` looks as though it does not exist) even though you accepted the invitation to the organisation, this might be because **two-factor authentication (2FA) is not enabled on your course GitHub account**. The organisation requires it, and until it is on you will be locked out of everything in `lse-my472`.
+
+Enable it with an **authenticator app, a passkey or a security key** (_not_ SMS). GitHub's instructions are here: [Configuring two-factor authentication](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication). If you would like to know what 2FA actually is first, start with [About two-factor authentication](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-two-factor-authentication). Once 2FA is on, you may need the teaching team to re-send your invitation. Please get in touch. 
+:::
+
+### Step 4. Clone it, edit it, and push it back
+
+Use the command line for the following.
+
+- Navigate to your course directory `LSE-MY472-AT26`, using an absolute path.
+
+- Clone `at26-seminar01-LSE-XXXXX-2627` into it. You should **not** be prompted for a username or password: Git uses the token you set up in Step 2 above.
+
+- Navigate into the repo you just cloned, then print your working directory.
+
+- Check the status of your files in the repo.
+
+- Open `README.md` in Positron, add a line saying "This is my first edit!" (without the quotation marks), then save and close it.
+
+- Check the status of the repo again. You should now see a line saying `modified: README.md`.
+
+- Stage the file, then commit it with a brief but informative message.
+
+- Push your changes to GitHub, then check the full log of the repo.
+
+- Go to the repository page on GitHub in your browser and confirm your edit is there.
+
+- Save your command line output to a text file called `commandline2.txt`, as you did in Exercise 2. Put it in your `at26-seminar01-LSE-XXXXX-2627` repository, then stage, commit and push it.
+
+
+## Exercise 4: directory management with Python
+
+Using Finder (macOS) or File Explorer (Windows), find your `LSE-MY472-AT26` directory and copy its absolute path (see lecture for how). Then create an object `my_wdir` below that has the path as a string.
+
+```{python}
+# your answer goes here
+```
+
+Print a list of all the files and subdirectories inside your `my_wdir` directory. (Hint: you will need to `import os` first, then look at `os.listdir()`.)
+
+```{python}
+# your answer goes here
+```
+
+Test if the file `commandline2.txt` file is in `my_wdir`. Before you decide whether the answer is what you expected, think about which folder you actually saved that file in, and what `os.listdir()` does and does not look inside.
+
+```{python}
+# your answer goes here
+```
+
+Using the `os.path.join()` function, create a new object `my_cl_file` which contains an absolute file path to the file `commandline2.txt`.
+
+```{python}
+# your answer goes here
+```
+
+Once you have created this file path, use it to check if the file exists.
+
+```{python}
+# your answer goes here
+```
+
+## Exercise 5: simple Python debugging with LLM help
+
+Create two objects, one named `x` and one named `y`. The object `x` should be the number 10 and the object `y` should be a character string containing the number 5. Run the code in the chunk (without compiling the html document).
+
+```{python}
+# your answer goes here
+```
+
+Now, using Python as a calculator, make an object `z` that divides `x` by `y`. Add `#| eval: false` as the first line *inside* the chunk, then run it (without compiling).
+
+```{python}
+# your answer goes here
+```
+
+::: {.callout-note}
+This chunk is deliberately going to fail, and that is a problem when you compile: a chunk that raises an error stops the whole document rendering, so you would never get your HTML.
+
+Setting `eval: false` **inside** the chunk overrides whatever the preamble says for that one chunk only. Once you switch the preamble to `eval: true`, every other chunk will run and this one will be skipped --- which is exactly what you want. You can still run it yourself with the Run Cell button, because running a chunk by hand ignores these settings entirely.
+
+This is the difference between a **global** execution option, set once in the preamble, and a **local** one, set inside a single chunk. The local option always wins.
+:::
+
+::: {.callout-note}
+Notice we asked you to _divide_, not multiply. `x * y` gives no error at all --- it returns `"5555555555"`, because multiplying a string by an integer repeats it. Code that runs without an error has not necessarily done what you intended.
+:::
+
+You should get an error in the console below. Navigate to [m365.cloud.microsoft/chat](https://m365.cloud.microsoft/chat) and log in with your LSE Microsoft Outlook log in credentials. Then, copy all of the output you have generated in the console for this exercise and paste it into the prompt box that says "Message Copilot" and wait for a response.
+
+Copy the response you get by pressing the copy button at the bottom left of Copilot's response. Create a new text file in Positron named `CopilotResponse.txt` and paste Copilot's response into the text file. Save this file in the `at26-seminar01-LSE-XXXXX-2627` repo.
+
+## Exercise 6: a script to fetch each week's slides
+
+In `02-first-repo.qmd` we downloaded the slides a line at a time. You will do this every week, so rather than retype it you will write a **Python script**: a plain `.py` file of code you can run whenever you like.
+
+- In Positron, create a new file called `get-slides.py` and save it in the top level of your `lse-my472-at26-lectures` repo.
+
+- In that file, write a script that does the following. You have written every one of these lines before. Hint: look back at `02-first-repo.qmd` Steps 5 and 6.
+
+    - Imports `os` and `urlretrieve`.
+    - Creates two variables at the very top: `week` that is the string `"week01"`, and `pdf_file_name`, with the name of this week's slides file. These are the only two lines you will change in later weeks.
+    - Builds the path to the folder named by `week` inside your lectures repo. Use `os.path.expanduser()` and `os.path.join()`, not a path you have typed out by hand.
+    - Makes that folder if it does not already exist.
+    - Builds the download URL out of `week` and `pdf_file_name`, rather than typing either of them a second time.
+    - Downloads the file into the folder, but only if it is not already there.
+    - Prints a message saying what it did.
+
+::: {.callout-tip}
+Putting `week` and `pdf_file_name` at the top means that next week you change two lines and everything below keeps working. Whenever you are about to copy a block of code so you can change one word inside it, that word should probably be a variable.
+:::
+
+- Run the script from the terminal: navigate to the repo, then `python3 get-slides.py` (macOS/Linux) or `py get-slides.py` (Windows). Since you already downloaded the Week 1 slides in `02-first-repo.qmd`, it should report that the file is already there rather than downloading it again.
+
+::: {.callout-warning}
+Run the script from the **terminal**, not with a Run button. Scripts are meant to be run whole.
+:::
+
+- At the command line, check the status of the `lse-my472-at26-lectures` repo, then stage, commit and push `get-slides.py` with an informative commit message.
+
+- Go to the repository page on GitHub and confirm your script is there.
+
+## Exercise 7: compile your solutions
+
+::: {.callout-important}
+Your work so far is in the files you downloaded before the seminar, and they are not yet inside `at26-seminar01-LSE-XXXXX-2627`. Move them into that folder now.
+:::
+
+Once you have finalised your answers, compile this file to HTML with the Preview button.
+
+Then, at the command line, stage, commit and push the following to your `at26-seminar01-LSE-XXXXX-2627` repo:
+
+- `CopilotResponse.txt`
+- `03-exercises.qmd`
+- `03-exercises.html`
